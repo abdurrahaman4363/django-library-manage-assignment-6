@@ -1,0 +1,124 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %}
+<br />
+{% block head_title %}National Library{% endblock %} {% block body %}
+<br />
+{% if borrowed_book_details %}
+<div class="p-3">
+  <div class="flex flex-between w-full p-5 my-4">
+    <div class="w-full md:w-1/2">
+      <img
+        src="{{ borrowed_book_details.image_url }}"
+        class="w-full h-auto"
+        alt="image"
+        style="height: 500px; width: 500px"
+      />
+    </div>
+    <div class="w-full md:w-1/2 -mx-3">
+      <div class="bg-white p-4 -mx-5 rounded">
+        <h5 class="text-xl font-bold mt-2">
+          <a href="#" class="text-indigo-800"
+            >{{ borrowed_book_details.name }}</a
+          >
+        </h5>
+        <p><b>Borrowing Price:</b> $ {{ borrowed_book_details.price }}</p>
+        <p><b>Category :</b> {{ borrowed_book_details.category }}</p>
+        <p>{{ borrowed_book_details.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="text-center m-2">
+  <a
+    href="{% url 'profile' %}"
+    class="font-bold text-white text-3xl text-center pb-2"
+  >
+    Your Profile Information
+  </a>
+</div>
+
+<div class="m-3">
+  <div class="my-10 py-3 px-4 bg-white rounded-xl shadow-md">
+    <h1 class="font-bold text-3xl text-center pb-5 pt-2">
+      Transaction Details
+    </h1>
+    <hr />
+    <form method="get" action="{% url 'transaction_report' %}">
+      <div class="flex justify-center">
+        <div
+          class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12 mx-2"
+        >
+          <label for="start_date">From:</label>
+          <input
+            class="appearance-none w-full outline-none focus:outline-none active:outline-none"
+            type="date"
+            id="start_date"
+            name="start_date"
+          />
+        </div>
+
+        <div
+          class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12"
+        >
+          <label for="end_date">To:</label>
+          <input
+            class="appearance-none w-full outline-none focus:outline-none active:outline-none"
+            type="date"
+            id="end_date"
+            name="end_date"
+          />
+        </div>
+        <div
+          class="mt-10 pl-3 pr-2 flex justify-between items-center relative w-4/12"
+        >
+          <button
+            class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Filter
+          </button>
+        </div>
+      </div>
+    </form>
+    <table
+      class="table-auto mx-auto w-full px-5 rounded-xl mt-8 border dark:border-neutral-500"
+    >
+      <thead class="bg-purple-900 text-white text-left">
+        <tr
+          class="bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-md py-2 px-4 text-white font-bold"
+        >
+          <th class="px-4 py-2">Account No</th>
+          <th class="px-4 py-2">Date</th>
+          <th class="px-4 py-2">Transaction Type</th>
+          <th class="px-4 py-2">Amount</th>
+          <th class="px-4 py-2">Balance After Transaction</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in report_list %}
+        <tr class="border-b dark:border-neutral-500">
+          <td class="px-4 py-2">{{request.user.account.account_no}}</td>
+          <td class="px-4 py-2">
+            {{ transaction.timestamp|date:"F d, Y h:i A" }}
+          </td>
+          <td class="px-4 py-3 text-s border">
+            <span
+              class="px-2 py-1 font-bold leading-tight rounded-sm text-red-700 bg-red-100"
+            >
+              {{ transaction.get_transaction_type_display }}
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            $ {{ transaction.amount|floatformat:2|intcomma }}
+          </td>
+          <td class="px-4 py-2">
+            $ {{ transaction.balance_after_transaction|floatformat:2|intcomma }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
