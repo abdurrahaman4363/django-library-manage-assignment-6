@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+
     "accounts",
     "core",
     "book",
@@ -88,26 +89,26 @@ WSGI_APPLICATION = "library_management.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": env("DB_NAME"),
-#         "USER": env("DB_USER"),
-#         "PASSWORD": env("DB_PASSWORD"),
-#         "HOST": env("DB_HOST"),
-#         "PORT": env("DB_PORT"),
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        # Feel free to alter this value to suit your needs.
-        default="postgres://librarymanagement_gmag_user:MRIo7o8fe3CWGffjfWiRfwLJypJg76Ec@dpg-cm8qv1q1hbls73adh430-a.oregon-postgres.render.com/librarymanagement_gmag",
-    )
-}
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         # Feel free to alter this value to suit your needs.
+#         default="postgres://librarymanagement_gmag_user:MRIo7o8fe3CWGffjfWiRfwLJypJg76Ec@dpg-cm8qv1q1hbls73adh430-a.oregon-postgres.render.com/librarymanagement_gmag",
+#     )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

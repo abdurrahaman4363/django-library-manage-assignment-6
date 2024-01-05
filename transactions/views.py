@@ -19,6 +19,15 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 
+def send_transaction_email(user,amount,subject,template):
+    message = render_to_string(template,{
+        'user':user,
+        'amount':amount
+    })
+    send_mail = EmailMultiAlternatives(subject,'',to=[user.email])
+    send_mail.attach_alternative(message,'text/html')
+    send_mail.send()
+
 
 class TransactionCreateMixin(LoginRequiredMixin, CreateView):
     template_name = "transaction_form.html"
@@ -63,14 +72,18 @@ class DepositeMoneyView(TransactionCreateMixin):
             self.request, f"{amount}$ was deposited to your account successfully"
         )
 
-        mail_subject = "Deposite Message"
-        message = render_to_string(
-            "deposite_mail.html", {"user": self.request.user, "amount": amount}
-        )
-        to_email = self.request.user.email
-        send_email = EmailMultiAlternatives(mail_subject, "", to=[to_email])
-        send_email.attach_alternative(message, "text/html")
-        send_email.send()
+        # mail_subject = "Deposite Message"
+        # message = render_to_string(
+        #     "deposite_mail.html", {"user": self.request.user, "amount": amount}
+        # )
+        # to_email = self.request.user.email
+        # send_email = EmailMultiAlternatives(mail_subject, "", to=[to_email])
+        # send_email.attach_alternative(message, "text/html")
+        # send_email.send()
+
+        send_transaction_email(self.request.user,amount,'Deposit','deposite_mail.html')
+
+
         return super().form_valid(form)
 
 
